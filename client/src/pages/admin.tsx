@@ -509,7 +509,7 @@ export default function AdminPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">Tokens Distributed</h3>
-                    <p className="text-3xl font-bold">{stats?.totalHA-RATEDistributed?.toLocaleString() || 0}</p>
+                    <p className="text-3xl font-bold">{stats?.totalHARATEDistributed?.toLocaleString() || 0}</p>
                   </div>
                   <div className="bg-chart-2/10 p-3 rounded-lg">
                     <Wallet className="w-6 h-6 text-chart-2" />
