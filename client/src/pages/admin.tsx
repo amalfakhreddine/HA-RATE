@@ -60,7 +60,7 @@ interface TaskDefinition {
 
 interface AdminStats {
   totalUsers: number;
-  totalHA-RATEDistributed: number;
+  totalHARATEDistributed: number;
   activeSubscriptions: number;
   totalTaskDefinitions: number;
   completedUserTasks: number;
