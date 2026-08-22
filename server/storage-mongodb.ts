@@ -1,5 +1,5 @@
 import { type User, type InsertUser, type Task, type InsertTask, type Withdrawal } from "@shared/schema";
-import { UserModel, TaskModel, WithdrawalModel, connectToDatabase } from "./mongodb";
+import { UserModel, TaskModel, WithdrawalModel, connectToDatabase } from "./mongodb.js";
 
 function generateReferralCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
