@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+server/public
+
+# Environment variables (CRITICAL: Never commit secrets!)
+.env
+.env.local
+.env.production
+
+# Cache & temp files
+.cache
+*.log
+.pythonlibs
+
+# Guide files
+*_GUIDE.md
+FOLDER_STRUCTURE.txt
+WHAT_TO_UPLOAD.txt
+⭐_UPLOAD_THESE.txt
+replit.md
+design_guidelines.md
+attached_assets/
+
+# System files
+.DS_Store
+vite.config.ts.*
+*.tar.gz
+
+# Replit-specific
+.replit
+replit.nix
