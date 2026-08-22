@@ -92,7 +92,7 @@ export async function processWithdrawal(withdrawalId: string) {
   
   try {
     // Send coins to user's wallet
-    const txHash = await sendHA-RATECoins(withdrawal.walletAddress, parseFloat(withdrawal.amount));
+    const txHash = await sendHARATECoins(withdrawal.walletAddress, parseFloat(withdrawal.amount));
     
     // Update status to completed
     await storage.updateWithdrawalStatus(withdrawalId, 'completed', txHash);
@@ -111,7 +111,7 @@ export async function processWithdrawal(withdrawalId: string) {
   }
 }
 
-async function sendHA-RATECoins(toWalletAddress: string, amount: number): Promise<string> {
+async function sendHARATECoins(toWalletAddress: string, amount: number): Promise<string> {
   // Check if project wallet is configured
   if (!config.projectWalletKey) {
     throw new Error('PROJECT_WALLET_KEY not configured. Cannot send HA-RATE tokens.');

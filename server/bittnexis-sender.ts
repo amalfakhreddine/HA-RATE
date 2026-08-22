@@ -15,7 +15,7 @@ import TonWeb from 'tonweb';
  * @param amount Amount of HA-RATE tokens to send
  * @returns Transaction hash
  */
-async function sendHA-RATETokens(toAddress: string, amount: number): Promise<string> {
+async function sendHARATETokens(toAddress: string, amount: number): Promise<string> {
   // Validate configuration
   if (!config.projectWalletKey) {
     throw new Error('PROJECT_WALLET_KEY not configured. Cannot send tokens.');
@@ -100,7 +100,7 @@ async function processPaidWithdrawal(withdrawalId: string) {
 
     // Send HA-RATE tokens
     const amount = parseFloat(withdrawal.amount.toString());
-    const txHash = await sendHA-RATETokens(withdrawal.walletAddress, amount);
+    const txHash = await sendHARATETokens(withdrawal.walletAddress, amount);
 
     // Update status to completed with transaction hash
     await WithdrawalModel.findByIdAndUpdate(withdrawalId, {
@@ -129,7 +129,7 @@ async function processPaidWithdrawal(withdrawalId: string) {
 /**
  * Worker that checks for paid withdrawals and sends tokens
  */
-export async function startHA-RATESenderWorker() {
+export async function startHARATESenderWorker() {
   if (!config.projectWalletKey) {
     console.warn('[HA-RATE Sender] PROJECT_WALLET_KEY not set. Token sending is disabled.');
     return;
