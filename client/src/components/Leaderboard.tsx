@@ -69,7 +69,7 @@ export default function Leaderboard({ entries }: LeaderboardProps) {
                 <p className="text-lg font-bold font-mono" data-testid={`points-rank-${entry.rank}`}>
                   {entry.tokens.toLocaleString()}
                 </p>
-                <p className="text-xs text-muted-foreground">Mizorate</p>
+                <p className="text-xs text-muted-foreground">HA-RATE</p>
               </div>
             </div>
           ))}

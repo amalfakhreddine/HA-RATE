@@ -17,11 +17,11 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-purple-500/20 bg-[#07080d]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-purple-500/20 bg-[#0b0612]/92 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <button onClick={() => setLocation('/mining')} className="flex items-center gap-3 group">
-            <img src="/mizorate-logo.png" alt="HA-RATE dragon logo" className="w-10 h-10 rounded-full object-cover ring-1 ring-purple-500/50" />
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-fuchsia-500 via-purple-600 to-violet-900 border border-fuchsia-300/40 shadow-[0_0_22px_rgba(168,85,247,.35)] flex items-center justify-center text-white font-black tracking-tight">HA</div>
             <div className="text-left leading-tight">
               <div className="font-black tracking-[0.12em] text-xl bg-gradient-to-r from-fuchsia-300 via-purple-400 to-violet-500 bg-clip-text text-transparent">HA-RATE</div>
               <div className="text-[10px] uppercase tracking-[0.24em] text-slate-500">mine • evolve • dominate</div>
@@ -44,7 +44,7 @@ export default function Header() {
       </div>
 
       <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-        <DialogContent className="sm:max-w-md bg-[#0c0d14] border-purple-500/20">
+        <DialogContent className="sm:max-w-md bg-[#12091d] border-purple-500/20">
           <DialogHeader>
             <DialogTitle>Disconnect wallet?</DialogTitle>
             <DialogDescription>Your HA-RATE progress stays saved to this wallet address.</DialogDescription>

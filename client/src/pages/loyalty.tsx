@@ -99,14 +99,6 @@ export default function LoyaltyPage() {
       reward: 0.2,
       total: 1
     },
-    {
-      id: "follow-x",
-      title: "Follow on X",
-      description: "Follow our official X account",
-      reward: 0.2,
-      total: 1,
-      link: "https://x.com/bittnexis?s=21"
-    },
   ];
 
   // Merge task definitions with backend data

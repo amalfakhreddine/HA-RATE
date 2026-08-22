@@ -60,7 +60,7 @@ interface TaskDefinition {
 
 interface AdminStats {
   totalUsers: number;
-  totalMizorateDistributed: number;
+  totalHA-RATEDistributed: number;
   activeSubscriptions: number;
   totalTaskDefinitions: number;
   completedUserTasks: number;
@@ -509,7 +509,7 @@ export default function AdminPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">Tokens Distributed</h3>
-                    <p className="text-3xl font-bold">{stats?.totalMizorateDistributed?.toLocaleString() || 0}</p>
+                    <p className="text-3xl font-bold">{stats?.totalHA-RATEDistributed?.toLocaleString() || 0}</p>
                   </div>
                   <div className="bg-chart-2/10 p-3 rounded-lg">
                     <Wallet className="w-6 h-6 text-chart-2" />
@@ -598,7 +598,7 @@ export default function AdminPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="miningBaseReward" className="text-base">Base Mining Reward (Mizorate)</Label>
+                    <Label htmlFor="miningBaseReward" className="text-base">Base Mining Reward (HA-RATE)</Label>
                     <Input
                       id="miningBaseReward"
                       name="miningBaseReward"
@@ -699,7 +699,7 @@ export default function AdminPage() {
 
                     <div className="grid md:grid-cols-3 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="reward" className="text-base">Reward (Mizorate)</Label>
+                        <Label htmlFor="reward" className="text-base">Reward (HA-RATE)</Label>
                         <Input
                           id="reward"
                           name="reward"

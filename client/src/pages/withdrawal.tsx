@@ -126,7 +126,7 @@ export default function WithdrawalPage() {
           {
             address: merchantAddressStr,
             amount: (parseFloat(withdrawalStatus.feeAmount) * 1e9).toString(), // Convert TON to nanoton
-            payload: 'Mizorate withdrawal fee',
+            payload: 'HA-RATE withdrawal fee',
           },
         ],
       };
@@ -267,7 +267,7 @@ export default function WithdrawalPage() {
                 {/* Amount Input */}
                 <div>
                   <label className="text-sm font-medium mb-2 block">
-                    Withdrawal Amount (Mizorate)
+                    Withdrawal Amount (HA-RATE)
                   </label>
                   <div className="flex gap-2">
                     <Input

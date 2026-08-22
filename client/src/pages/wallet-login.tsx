@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Wallet, Sparkles, TrendingUp } from "lucide-react";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
-import logoImg from "@assets/WhatsApp Image 2025-10-12 at 22.46.31_78154f44_1760298460946.jpg";
 
 export default function WalletLogin() {
   const { walletAddress, isConnecting, connectWallet } = useWallet();
@@ -28,7 +27,7 @@ export default function WalletLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.22),transparent_42%),linear-gradient(145deg,#09040f,#14091f_55%,#09040f)] p-4">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-4">
           <div className="space-y-2">
@@ -41,7 +40,7 @@ export default function WalletLogin() {
           </div>
         </div>
 
-        <Card className="border-primary/20 shadow-xl">
+        <Card className="border-purple-400/25 bg-[#14091f]/95 shadow-[0_0_55px_rgba(147,51,234,0.16)]">
           <CardHeader className="text-center space-y-3 pb-4">
             <CardTitle className="text-2xl">Welcome</CardTitle>
             <CardDescription className="text-base">

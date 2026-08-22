@@ -56,7 +56,7 @@ export default function MiningSection({ lastClaimTime, miningPower, pointsPerCla
     : 'Free mining mode';
 
   return (
-    <Card className="overflow-hidden border-purple-500/20 bg-[#0b0c12]">
+    <Card className="overflow-hidden border-purple-500/20 bg-[#14091f]">
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-7">
           <div className="flex items-center gap-4">
@@ -67,9 +67,9 @@ export default function MiningSection({ lastClaimTime, miningPower, pointsPerCla
         </div>
 
         <div className="grid md:grid-cols-3 gap-3 mb-5">
-          <div className="rounded-xl bg-black/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Clock className="w-3.5 h-3.5"/> next claim</div><div className="font-mono font-black text-xl">{timeLeft}</div></div>
-          <div className="rounded-xl bg-black/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Zap className="w-3.5 h-3.5"/> mining power</div><div className="font-mono font-black text-xl">{miningPower}×</div></div>
-          <div className="rounded-xl bg-black/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Pickaxe className="w-3.5 h-3.5"/> reward</div><div className="font-mono font-black text-xl text-purple-300">{(pointsPerClaim * miningPower).toLocaleString()} MIZ</div></div>
+          <div className="rounded-xl bg-purple-950/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Clock className="w-3.5 h-3.5"/> next claim</div><div className="font-mono font-black text-xl">{timeLeft}</div></div>
+          <div className="rounded-xl bg-purple-950/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Zap className="w-3.5 h-3.5"/> mining power</div><div className="font-mono font-black text-xl">{miningPower}×</div></div>
+          <div className="rounded-xl bg-purple-950/25 border border-white/5 p-4"><div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider mb-2"><Pickaxe className="w-3.5 h-3.5"/> reward</div><div className="font-mono font-black text-xl text-purple-300">{(pointsPerClaim * miningPower).toLocaleString()} HA-RATE</div></div>
         </div>
 
         <Button size="lg" className="w-full h-14 text-base font-black bg-gradient-to-r from-violet-700 to-fuchsia-700 hover:from-violet-600 hover:to-fuchsia-600 shadow-[0_0_35px_rgba(147,51,234,0.2)]" disabled={!canClaim || claimMutation.isPending} onClick={() => claimMutation.mutate()}>
@@ -77,7 +77,7 @@ export default function MiningSection({ lastClaimTime, miningPower, pointsPerCla
         </Button>
 
         <div className="mt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-purple-500/20 bg-purple-500/5 p-4">
-          <div className="flex gap-3"><LockKeyhole className="w-5 h-5 text-purple-300 mt-0.5"/><div><p className="font-semibold">Free mining is intentionally slow</p><p className="text-sm text-slate-400">500 MIZ every 6 hours. It is possible to reach every level for free, but it takes patience.</p></div></div>
+          <div className="flex gap-3"><LockKeyhole className="w-5 h-5 text-purple-300 mt-0.5"/><div><p className="font-semibold">Free mining is intentionally slow</p><p className="text-sm text-slate-400">500 HA-RATE every 6 hours. It is possible to reach every level for free, but it takes patience.</p></div></div>
           {miningPower <= 1 && <Button variant="outline" className="shrink-0 border-purple-500/30" onClick={() => setLocation('/subscription')}>Get 5× · 0.5 TON</Button>}
         </div>
       </div>

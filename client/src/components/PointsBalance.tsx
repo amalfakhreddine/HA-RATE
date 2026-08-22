@@ -8,7 +8,7 @@ interface TokensBalanceProps { tokens: number; }
 export default function TokensBalance({ tokens }: TokensBalanceProps) {
   const [, setLocation] = useLocation();
   return (
-    <Card className="overflow-hidden border-purple-500/20 bg-gradient-to-br from-purple-950/50 via-[#10111a] to-[#090a10] shadow-[0_0_60px_rgba(126,34,206,0.10)]">
+    <Card className="overflow-hidden border-purple-500/20 bg-gradient-to-br from-purple-950/70 via-[#10111a] to-[#090a10] shadow-[0_0_60px_rgba(126,34,206,0.10)]">
       <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-purple-300/70 mb-2">Your HA-RATE balance</p>

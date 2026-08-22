@@ -99,7 +99,7 @@ export default function TaskCard({ id, title, description, reward, progress = 0,
             <div className="flex items-center justify-between">
               <div className="flex items-baseline gap-1">
                 <span className="text-lg font-bold font-mono text-primary">+{reward.toLocaleString()}</span>
-                <span className="text-xs text-muted-foreground">Mizorate</span>
+                <span className="text-xs text-muted-foreground">HA-RATE</span>
               </div>
               <Button 
                 size="sm" 

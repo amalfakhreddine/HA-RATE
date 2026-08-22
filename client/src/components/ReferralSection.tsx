@@ -13,7 +13,7 @@ interface ReferralSectionProps {
 
 export default function ReferralSection({ referralCode, referralCount, referralEarnings }: ReferralSectionProps) {
   const [copied, setCopied] = useState(false);
-  const referralLink = `/referral?ref=${referralCode}`;
+  const referralLink = `https://ha-rate.vercel.app/referral?ref=${referralCode}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
@@ -36,7 +36,7 @@ export default function ReferralSection({ referralCode, referralCount, referralE
           </div>
           <div>
             <h3 className="text-2xl font-bold">Referral Program</h3>
-            <p className="text-sm text-muted-foreground">Earn 1 token per referral</p>
+            <p className="text-sm text-muted-foreground">Earn HA-RATE for every successful referral</p>
           </div>
         </div>
 
