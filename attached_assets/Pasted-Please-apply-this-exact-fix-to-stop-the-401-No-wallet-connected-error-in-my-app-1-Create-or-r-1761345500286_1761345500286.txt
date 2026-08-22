@@ -1,0 +1,117 @@
+Please apply this exact fix to stop the “401: No wallet connected” error in my app.
+
+1️⃣ Create or replace this React file:
+📁 src/components/ClaimButton.jsx
+────────────────────────────
+import React from "react";
+import { useTonConnect } from "@tonconnect/ui-react";
+
+export default function ClaimButton() {
+  const { connector, account } = useTonConnect() || {};
+
+  const handleClaim = async () => {
+    try {
+      if (!account?.address) {
+        alert("Please connect your wallet first.");
+        return;
+      }
+
+      let signed = null;
+      try {
+        const message = `Claim request:${Date.now()}`;
+        signed = await connector?.request({
+          method: "ton_sign",
+          params: { address: account.address, data: message },
+        });
+      } catch {
+        signed = null;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        "x-wallet-address": account.address,
+      };
+      if (signed) headers["x-wallet-signature"] = JSON.stringify(signed);
+
+      const res = await fetch("/api/claim", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ claimType: "mining" }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) return alert(`Claim failed: ${json?.error || res.status}`);
+
+      alert(`Claim success: ${JSON.stringify(json)}`);
+    } catch (err) {
+      console.error(err);
+      alert("Claim error, check console.");
+    }
+  };
+
+  return (
+    <button onClick={handleClaim} className="btn-claim px-4 py-2 rounded">
+      Claim Rewards
+    </button>
+  );
+}
+────────────────────────────
+
+2️⃣ Add this backend route:
+📁 server/routes/claim.js
+────────────────────────────
+const express = require("express");
+const router = express.Router();
+
+router.post("/claim", async (req, res) => {
+  try {
+    const address = req.headers["x-wallet-address"] || req.body?.address;
+    const signature = req.headers["x-wallet-signature"] || req.body?.signature;
+
+    if (!address) {
+      return res.status(401).json({ error: "No wallet connected" });
+    }
+
+    // Here you can verify signature or process mining rewards
+    return res.json({ success: true, amount: 0.2, address });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+module.exports = router;
+────────────────────────────
+
+3️⃣ Make sure the server connects the route.
+In server.js (or index.js where Express is created), add:
+────────────────────────────
+const express = require("express");
+const app = express();
+app.use(express.json());
+const claimRouter = require("./server/routes/claim");
+app.use("/api", claimRouter);
+────────────────────────────
+
+4️⃣ Add this proxy config to the root:
+📁 vite.config.js
+────────────────────────────
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+});
+────────────────────────────
+
+After applying:
+- Restart the Replit server.
+- Connect wallet again.
+- Press Claim Rewards → it should now show “Claim success” instead of 401.

@@ -1,0 +1,39 @@
+Hi — please remove all subscription purchase UI from the Mining page and ensure subscription purchase flows live only on the existing Subscription tab. Implementation details and acceptance checklist below.
+
+What to change
+	1.	Remove any subscription cards, plan prices, “Buy”, “Subscribe”, “Upgrade”, or similar purchase buttons from /mining.
+	2.	Remove any subscription-related modals or inline checkout flows that can be triggered from the Mining page. If a button currently opens a modal on Mining, delete that button or make it navigate to /subscription instead.
+	3.	Keep the Subscription tab (/subscription) as the single place for selecting and buying plans. Do not remove or change the existing functionality on the Subscription tab — it should remain fully functional.
+	4.	Update any CTAs on the Mining page that mention subscription benefits so they either:
+	•	Link to the Subscription tab (use a client-side navigate to /subscription), or
+	•	Show non-purchase info only (e.g., “Learn more” linking to subscription page).
+	5.	Preserve any non-purchase mining UI (boost status, active multipliers, indicator that user has an active subscription) — these read-only indicators can remain on Mining but must not initiate purchases.
+	6.	Update copy: if any text on Mining asks users to “Buy” or shows a price, remove the price and change copy to “Manage plans” or “Go to Subscription” with a link to /subscription.
+	7.	Server-side: ensure endpoints that perform purchases cannot be triggered from mining page actions unless the request originates from the subscription flow (add server-side validation for required purchase context if needed).
+	8.	Deep links: if a deep link or action currently tries to open a checkout modal directly from /mining, update it to redirect the user to /subscription (client-side replace navigation recommended to avoid back loop).
+	9.	Analytics: remap or consolidate analytics so purchase events originate from the Subscription tab only. Remove or update any analytics events that were fired from Mining for purchases (keep view events for Mining content).
+	10.	Tests & cleanup: remove or update tests that expect subscription UI on the Mining page; ensure no leftover imports/components related to inline checkout remain in Mining code.
+
+Suggested small copy replacements (use these exact short lines if you want):
+	•	Replace any “Buy” button on Mining with: “Manage plans” → navigate to /subscription.
+	•	Replace any price text on Mining with: “Available in Subscription tab.”
+	•	Replace modal trigger with: navigate('/subscription') (use router replace if appropriate).
+
+Acceptance checklist (please run and report pass/fail)
+	1.	Open the Mining page:
+	•	No purchase buttons, prices, or checkout modals are visible or triggerable. PASS/FAIL
+	•	Any boost or subscription status shown is read-only and does not start a purchase. PASS/FAIL
+	2.	Click any CTA that used to buy a plan on Mining:
+	•	It navigates to /subscription (client-side) and does not open an inline checkout. PASS/FAIL
+	3.	Open Subscription tab:
+	•	Subscription UI still works exactly as before (plans shown, buy flow works). PASS/FAIL
+	4.	Attempt direct purchase from Mining via dev tools / deep link:
+	•	Server rejects or redirects to subscription flow when purchase context missing. PASS/FAIL
+	5.	Analytics:
+	•	Purchase events are recorded only when purchase is initiated from /subscription. PASS/FAIL
+	6.	Code cleanup:
+	•	No leftover inline checkout components or imports remain inside Mining page component. PASS/FAIL
+	7.	Mobile:
+	•	Mining mobile layout unaffected and no purchase UI present. PASS/FAIL
+
+When done, paste the checklist results and any console errors or blockers. If any tests fail, include the failing stack traces or screenshots.

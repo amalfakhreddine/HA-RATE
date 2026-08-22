@@ -1,0 +1,66 @@
+Hi — please implement a bottom tab bar and the related route splitting/behavior for the app. This is an updated version — add the Tasks tab (it was missing from the previous message). React + Vite + Tailwind assumed.
+
+⸻
+
+1) Tabs / routes
+
+Create a fixed bottom tab bar with six tabs. Each tab must navigate to its own route (no single-page stacked sections):
+	•	Mining -> /mining
+	•	Referral -> /referral
+	•	Tasks -> /tasks
+	•	Features -> /features
+	•	Subscription -> /subscription
+	•	Leaderboard -> /leaderboard
+
+Notes:
+	•	These pages currently exist as sections on one page; refactor so each is reachable by its own route and rendered independently (React Router recommended).
+	•	The bottom tab bar must be fixed at the bottom on mobile and desktop, responsive, and not overlap page content (add bottom padding / safe area to page content).
+
+⸻
+
+2) Bottom tab bar UI & behavior
+	•	Show icon + label on each tab.
+	•	Highlight the active tab (color + subtle glow/underline).
+	•	Tapping a tab takes the user to that route (client-side navigation, no full reload).
+	•	Tabs must be accessible (aria-label, aria-current="page", focus states) and keyboard navigable.
+	•	Touchable area for each tab: minimum 44–48px.
+
+⸻
+
+3) Intro header behavior
+
+There is an intro header that currently shows “Start Mining” and “Learn more”. Change behavior so:
+	•	The header appears only once immediately after the user logs in (first time they use the app after login).
+	•	After it has been shown once for that user, it should not show again on subsequent page views or sessions for that user.
+	•	If the user clears data or logs in as a different account it may show again.
+
+Implementation suggestion:
+	•	Use the authenticated user id to set a persistent flag (recommended: localStorage keyed by user id, e.g. seenIntro::<userId>). If you have a user profile store, you can persist this server-side.
+	•	Show the header only if !seenIntroForThisUser. When the user presses Start Mining or closes the header, set seenIntro::<userId> = "true".
+
+⸻
+
+4) Start Mining button behavior
+	•	The Start Mining button inside the header must be functional:
+	•	When pressed it navigates to the Mining tab route (/mining).
+	•	It also marks the header as “seen” so it will not reappear.
+	•	Use useNavigate() (React Router) or the app’s router push method.
+
+⸻
+
+5) Edge cases
+	•	If the user opens the app and is not authenticated, do not show the header.
+	•	If the user logs out then logs in again with the same account, the header should remain hidden (unless intentionally reset).
+	•	If the user logs in with a different account, the header can show once for that new account.
+
+⸻
+
+6) Accessibility & mobile UX
+	•	Large tappable areas (min 44–48px) for icons/labels.
+	•	Provide aria-current="page" for the active tab.
+	•	Respect safe-bottom area for devices with notches.
+	•	Keyboard focus ring visible.
+
+⸻
+
+7) Quick example code (React + Tailwind + React Router) — copy/paste friendly

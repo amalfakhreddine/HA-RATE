@@ -1,0 +1,27 @@
+Hey team — please fix the wallet connection + mining logic in my project.
+
+Here’s exactly what I need you to do:
+	1.	Fix the “401: No wallet connected” error — make sure when a user logs in through TON wallet, the session stays active with a secure cookie or token so it doesn’t disconnect when pressing “Start Mining” or “Claim Rewards.”
+	•	The session must stay valid across page reloads, closing the browser, or refreshing.
+	•	All protected endpoints (/start-mining, /claim, /me/state) should check the user session server-side instead of relying on client memory.
+	2.	Persistent mining sessions (server side) — once a user starts mining, the progress must continue even if they log out, close the app, or turn off the PC.
+	•	When 4 hours of mining time pass, the session auto-stops and waits for the user to press Claim Rewards.
+	•	After claiming, it restarts a new mining cycle if the user still has an active subscription.
+	3.	Auto-mining plans — users with 2x, 3x, or 4x subscriptions should keep auto-mining even if they go offline. The multiplier must be applied server-side, not on the frontend.
+	4.	User state on login — when a user logs in again, all tabs (Mining, Tasks, Subscription, and Leaderboard) must instantly show their current status.
+	•	GET /me/state should return: mining progress, subscription tier, multiplier, active tasks, and leaderboard info.
+	5.	Claim Rewards endpoint — it must verify the user’s session and allow claim only if mining time is complete.
+	•	After a claim, mark that mining round as completed and start a new one automatically if the plan allows it.
+	6.	Security and persistence — use HttpOnly cookies or JWT tokens for sessions with proper CORS setup (Access-Control-Allow-Credentials: true).
+	•	Do not reset the user session or wallet connection on every request.
+	•	Make sure cookies are SameSite=None and Secure so they work on HTTPS.
+
+Basically:
+✅ User logs in → session stays active.
+✅ Start Mining works instantly.
+✅ Mining continues server-side even if offline.
+✅ Claim Rewards works only when eligible.
+✅ Subscriptions apply automatically (2x, 3x, 4x).
+✅ On login, everything (tasks, subscription, leaderboard) loads as active.
+
+Please make all of this functional so there’s no more “No wallet connected” or reset issue after login.

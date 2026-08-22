@@ -1,0 +1,35 @@
+Subject: URGENT — Temporarily disable 2FA enforcement on Admin Panel (frontend + backend)
+
+Hi Replit team — I cannot sign in to the admin panel because 2FA is blocking access. Please apply the temporary 2FA bypass described below so I can regain access. This is meant to be temporary — please confirm when done and advise when you will remove the bypass.
+
+Summary of requested actions (backend)
+	1.	Add an environment variable named DISABLE_2FA (value: true) to the project secrets so the server can detect a temporary bypass mode.
+	2.	Modify the authentication middleware to respect DISABLE_2FA=true and allow successful password authentication to proceed without requiring the 2FA verification step. When bypassing, ensure the session or request is marked so downstream routes treat the login as 2FA-passed.
+	3.	Update the login handler so that when DISABLE_2FA=true it short-circuits the 2FA enforcement step and completes the login flow normally.
+	4.	Run a database update to clear or disable stored 2FA enrollment for the affected admin accounts (so they are not considered enrolled while the bypass is active). For example, set the admins’ two_factor_enabled flag to false and remove any stored TOTP/2FA secrets for those admin records.
+	5.	Restart the backend server after applying the changes.
+
+Summary of requested actions (frontend)
+	1.	Add an environment variable named REACT_APP_DISABLE_2FA (value: true) or the equivalent in the frontend build environment so the UI can detect the temporary bypass.
+	2.	Update the frontend login flow so that when REACT_APP_DISABLE_2FA=true it does not require showing a 2FA input screen and redirects the user to the admin dashboard after successful password authentication.
+	3.	Hide or conditionally remove any TOTP/2FA input components from the login UI while the bypass is active.
+	4.	Rebuild and redeploy the frontend so the change takes effect.
+
+Provider-specific notes (please apply whichever matches our setup)
+• If using Firebase Authentication / Firebase multi-factor: unenroll multi-factor for the admin users or use the Admin SDK to remove enrolled factors for the affected admin accounts.
+• If using Supabase or a custom user table: clear the two-factor flags/columns and ensure RLS/policies do not require a 2FA claim for admin routes while bypass is active.
+• If using Auth0 or another identity provider that can enforce MFA for a client: remove the MFA requirement for the admin client temporarily, or unenroll the affected admin accounts via the provider console or management API.
+
+Security & operational instructions
+• This bypass is temporary and weakens security. After I regain access, please plan to:
+– Remove the DISABLE_2FA and REACT_APP_DISABLE_2FA env vars (or set them to false).
+– Re-enable normal 2FA enforcement and re-enroll admin users using a secure process.
+• Prefer safer alternatives if feasible: allowlisting specific IPs to bypass 2FA for a short window, or generating a one-time admin reset token stored as an env var that can be used to clear 2FA for specific accounts. If you implement IP allowlist or one-time reset, please document the approach and timeline in your reply.
+• Log all changes and keep an audit trail of who performed the DB update and when.
+
+What I need you to confirm in your reply
+	1.	That DISABLE_2FA and REACT_APP_DISABLE_2FA were added and set to true (or what alternative you implemented).
+	2.	That backend authentication middleware/login flow was modified to bypass 2FA when the flag is true.
+	3.	That frontend was rebuilt and the login flow no longer requires 2FA when the flag is true.
+	4.	That the database update to clear two-factor enrollment for affected admin accounts was executed (please list which admin accounts were updated or confirm a full update was run).
+	5.	A plan and ETA for re-enabling 2FA or otherwise securing the admin panel after I regain access.

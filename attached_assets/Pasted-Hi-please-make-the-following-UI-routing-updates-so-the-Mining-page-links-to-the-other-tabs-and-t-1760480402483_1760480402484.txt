@@ -1,0 +1,49 @@
+Hi — please make the following UI & routing updates so the Mining page links to the other tabs and the Leaderboard tab is added and functional.
+	1.	Make Referral Program on Mining page functional
+
+	•	The Referral Program element (card/button/link) that appears on the Mining page must navigate the user to the Referral tab/route (/referral) when clicked.
+	•	Do not open a modal or inline purchase flow from Mining — perform a client-side navigation to /referral. Use the app router’s push/navigate method. Example behavior: navigate('/referral').
+	•	Preserve the current visual style of the Referral element. Add aria-label="Go to Referral" and ensure keyboard focus and tap area are large enough (min 44–48px).
+
+	2.	Make Daily Tasks on Mining page functional
+
+	•	The Daily Tasks element (card/button/link) on Mining must navigate to the Tasks tab/route (/tasks) when clicked.
+	•	Do not duplicate the task content on Mining — the button should take the user to /tasks where the full task UI lives. Use client-side navigation (no full page reload). Example: navigate('/tasks').
+	•	Keep visual style and accessibility attributes (aria-label="Go to Tasks").
+
+	3.	Add Leaderboard tab and make it functional
+
+	•	Add a Leaderboard tab to the bottom navigation (route /leaderboard) if it does not already exist. If it already exists, ensure it is visible and functional.
+	•	Leaderboard should show user rankings, scores/coins, and ability to view profiles or filter (as the existing design requires). Ensure the tab icon + label match the other tabs and aria-current="page" is set when active.
+	•	Client-side navigation to /leaderboard must render the leaderboard page without reload.
+
+	4.	Deep links & routing
+
+	•	Ensure direct navigation to /referral, /tasks, or /leaderboard loads the correct tab/page (deep links must work).
+	•	If any legacy links previously attempted to open referral/tasks inside mining modals, update them to navigate to the new routes instead.
+
+	5.	Analytics & events
+
+	•	Fire analytics events on click from Mining like mining_click_referral and mining_click_tasks (or remap to your naming scheme). The Referral and Tasks pages should still fire their own page-view events (referral_view, tasks_view, leaderboard_view).
+	•	Ensure no duplicate analytics events are fired when navigating.
+
+	6.	UX & accessibility
+
+	•	Buttons that navigate should be clearly labeled (suggested visible text: “Go to Referral” and “Go to Tasks” or keep current labels and add the aria-label shown above).
+	•	Maintain keyboard navigation, focus states, and screen-reader compatibility.
+	•	Preserve any badges (e.g., unread tasks count or referral bonus) on the Mining page and pass that state to the target page if needed.
+
+	7.	Edge cases & server validation
+
+	•	If a user is unauthenticated and taps Referral/Tasks/Leaderboard, route them to login first and then forward to the intended page after successful login.
+	•	Ensure server-side endpoints related to tasks or referral actions still validate the user session — do not rely only on client routing.
+
+	8.	Acceptance checklist (please run and report PASS/FAIL for each):
+
+	•	On Mining page, click Referral Program element → navigates to /referral and shows Referral page. PASS/FAIL
+	•	On Mining page, click Daily Tasks element → navigates to /tasks and shows Tasks page. PASS/FAIL
+	•	Bottom nav shows Leaderboard tab; clicking it navigates to /leaderboard and shows leaderboard. PASS/FAIL
+	•	Deep links /referral, /tasks, /leaderboard load correctly from a fresh browser load (not logged in and logged in cases). PASS/FAIL
+	•	Accessibility: referral/tasks buttons are keyboard-focusable and have correct aria-labels. PASS/FAIL
+	•	Analytics: clicking from Mining emits the mining click events and destination pages emit view events. PASS/FAIL
+	•	No visual regressions: Mining layout unchanged except button behavior; no broken CSS or overlap. PASS/FAIL

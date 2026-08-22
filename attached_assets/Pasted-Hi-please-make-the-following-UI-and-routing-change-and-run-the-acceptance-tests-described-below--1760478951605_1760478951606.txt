@@ -1,0 +1,69 @@
+Hi — please make the following UI and routing change and run the acceptance tests described below.
+
+Change request:
+	1.	Move the entire Earning Opportunities section so it is part of the Mining page/tab (/mining). Remove it from wherever it currently lives (no duplicate copies).
+	2.	Delete the Features tab and its route (/features) entirely from the app and the bottom tab bar.
+
+Details & requirements:
+	•	The Mining page must now include everything that was in Earning Opportunities (all cards, buttons, copy, links, and analytics hooks) and appear exactly as before, only under /mining. Preserve layout, styles, and interactive behavior.
+	•	Remove the Features tab item from the bottom navigation and any other menus or links that point to /features. If a user attempts to open /features (deep link), redirect them to /mining with a 302 client-side navigate or a server redirect, depending on your routing setup.
+	•	Update any header or page breadcrumbs so they do not reference “Features” anymore.
+	•	Clean up code: delete the Features page component and any unused imports, routes, or config entries that reference the Features plan. If any server endpoints or database records ONLY relate to Features UI (not shared model data), archive or remove them as appropriate.
+	•	Ensure the IntroHeader “Start Mining” button still navigates to /mining and that the moved Earning Opportunities section is visible after that navigation where expected.
+	•	Ensure accessibility attributes and ARIA roles are preserved when moving components.
+
+Backend & data:
+	•	If Earning Opportunities content is generated from the backend (API), keep the same API used but ensure the Mining page consumes it. If the API path previously returned content only for /features or /earning-opportunities, make sure the Mining page requests the same endpoint or update the API to return the content for mining clients.
+	•	Ensure analytics events previously tagged with features_view or similar are updated to mining_earning_opportunities_view or another agreed event name and that purchase/cta events still fire.
+
+Deployment and cache:
+	•	Invalidate caches and CDN entries that could serve the old Features page or old tab bar. Bump service worker version if the site uses a service worker, to force clients to get the new bottom nav.
+	•	If you use server-side route caching, clear it so /features redirects immediately to /mining.
+
+Acceptance test checklist (please run and confirm pass/fail for each):
+	1.	Navigation & routing
+
+	•	Open the app and verify the bottom tab bar now contains: Mining, Referral, Tasks, Subscription, Leaderboard (no Features tab).
+	•	Click the Mining tab and confirm the Earning Opportunities content appears inside the Mining page.
+	•	Attempt to navigate to /features manually in the address bar and confirm the app redirects to /mining.
+
+	2.	Content integrity
+
+	•	Confirm every element that used to be in Earning Opportunities (all cards, text, CTAs, icons) is present and styled correctly on the Mining page with the same behavior (expand/collapse, buttons, links).
+	•	Confirm the “Start Mining” button still navigates to /mining and displays the Earning Opportunities section if that was the intended landing area.
+
+	3.	Links & menus
+
+	•	Confirm no visible link in header, footers, sidebars, or nav points to /features.
+	•	Confirm any internal links that previously targeted features now point to the relevant place under mining or are removed.
+
+	4.	Payments & CTAs
+
+	•	If any CTA within Earning Opportunities initiates payments or subscriptions, perform a sandbox test purchase flow and confirm the correct plan id and price are used and recorded.
+
+	5.	Analytics & events
+
+	•	Trigger view and click events for Earning Opportunities and confirm analytics show them under the new event name (or confirm that events were remapped) and that no events remain keyed to features_view.
+
+	6.	Code cleanup & tests
+
+	•	Confirm there are no unused imports, route entries, or config entries referencing features in the codebase (search repository).
+	•	Run unit/integration tests and confirm no failures related to deleted route/component.
+
+	7.	Mobile & responsive
+
+	•	On mobile, confirm the bottom nav does not overlap content. Confirm Earning Opportunities content inside Mining is responsive and matches the previous mobile layout.
+
+	8.	Edge cases
+
+	•	Log out and open the app as unauthenticated user — ensure nothing breaks because /features was removed.
+	•	Log in with different accounts and confirm the intro header logic and seen flag for intro still behaves correctly.
+
+Notes for dev:
+	•	Preferred behavior for /features deep links: perform a client-side redirect to /mining with replace so the user’s back button does not loop. Example (React Router): navigate('/mining', { replace: true }).
+	•	If removing the Features component causes tests to fail, update tests to check Mining contains Earning Opportunities instead.
+
+Please run the checklist and report back with:
+	•	Which tests passed and which failed (copy/paste the test results).
+	•	Any issues encountered (console errors, broken links, missing assets).
+	•	A short note on where you implemented the redirect for /features (client or server) so I can validate.
