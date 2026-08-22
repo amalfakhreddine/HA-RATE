@@ -1,6 +1,6 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage-mongodb";
+import { storage } from "./storage-mongodb.js";
 import { z } from "zod";
 import { randomUUID } from "crypto";
 import session from "express-session";
