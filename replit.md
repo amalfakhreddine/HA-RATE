@@ -78,7 +78,7 @@ The application is configured to use **MongoDB** as the primary data store (via 
 
 **Task & Referral Systems:**
 - Task definitions with progress tracking and completion rewards
-- Referral code generation (format: "Bittnexis" + 8 random alphanumeric chars)
+- Referral code generation (format: "HA-RATE" + 8 random alphanumeric chars)
 - Referral earnings tracked separately from mining rewards
 - Leaderboard ranking by total HA-RATE balance
 
