@@ -15,7 +15,7 @@ import TonWeb from 'tonweb';
  * @param amount Amount of HA-RATE tokens to send
  * @returns Transaction hash
  */
-async function sendBittnexisTokens(toAddress: string, amount: number): Promise<string> {
+async function sendHA-RATETokens(toAddress: string, amount: number): Promise<string> {
   // Validate configuration
   if (!config.projectWalletKey) {
     throw new Error('PROJECT_WALLET_KEY not configured. Cannot send tokens.');
@@ -37,11 +37,11 @@ async function sendBittnexisTokens(toAddress: string, amount: number): Promise<s
 
     // Get wallet address
     const walletAddress = await wallet.getAddress();
-    console.log(`[Bittnexis Sender] Sending from wallet: ${walletAddress.toString(true, true, true)}`);
+    console.log(`[HA-RATE Sender] Sending from wallet: ${walletAddress.toString(true, true, true)}`);
 
     // Get seqno
     const seqno = (await wallet.methods.seqno().call()) || 0;
-    console.log(`[Bittnexis Sender] Wallet seqno: ${seqno}`);
+    console.log(`[HA-RATE Sender] Wallet seqno: ${seqno}`);
 
     // TODO: Implement actual Jetton (token) transfer
     // For now, we'll send a simple TON transfer as a placeholder
@@ -57,12 +57,12 @@ async function sendBittnexisTokens(toAddress: string, amount: number): Promise<s
     });
 
     const txHash = await transfer.send();
-    console.log(`[Bittnexis Sender] ✓ Sent ${amount} tokens to ${toAddress}, tx: ${txHash}`);
+    console.log(`[HA-RATE Sender] ✓ Sent ${amount} tokens to ${toAddress}, tx: ${txHash}`);
     
     return txHash;
 
   } catch (error: any) {
-    console.error('[Bittnexis Sender] Error sending tokens:', error);
+    console.error('[HA-RATE Sender] Error sending tokens:', error);
     throw new Error(`Failed to send tokens: ${error.message}`);
   }
 }
@@ -74,23 +74,23 @@ async function processPaidWithdrawal(withdrawalId: string) {
   const withdrawal = await WithdrawalModel.findById(withdrawalId);
 
   if (!withdrawal) {
-    console.error(`[Bittnexis Sender] Withdrawal ${withdrawalId} not found`);
+    console.error(`[HA-RATE Sender] Withdrawal ${withdrawalId} not found`);
     return;
   }
 
   // Verify fee is paid and status is pending
   if (!withdrawal.feePaid) {
-    console.log(`[Bittnexis Sender] Withdrawal ${withdrawalId} - fee not paid yet`);
+    console.log(`[HA-RATE Sender] Withdrawal ${withdrawalId} - fee not paid yet`);
     return;
   }
 
   if (withdrawal.status !== 'pending') {
-    console.log(`[Bittnexis Sender] Withdrawal ${withdrawalId} - already processed (${withdrawal.status})`);
+    console.log(`[HA-RATE Sender] Withdrawal ${withdrawalId} - already processed (${withdrawal.status})`);
     return;
   }
 
   try {
-    console.log(`[Bittnexis Sender] Processing withdrawal ${withdrawalId} for ${withdrawal.walletAddress}, amount: ${withdrawal.amount}`);
+    console.log(`[HA-RATE Sender] Processing withdrawal ${withdrawalId} for ${withdrawal.walletAddress}, amount: ${withdrawal.amount}`);
 
     // Update status to processing
     await WithdrawalModel.findByIdAndUpdate(withdrawalId, {
@@ -100,7 +100,7 @@ async function processPaidWithdrawal(withdrawalId: string) {
 
     // Send HA-RATE tokens
     const amount = parseFloat(withdrawal.amount.toString());
-    const txHash = await sendBittnexisTokens(withdrawal.walletAddress, amount);
+    const txHash = await sendHA-RATETokens(withdrawal.walletAddress, amount);
 
     // Update status to completed with transaction hash
     await WithdrawalModel.findByIdAndUpdate(withdrawalId, {
@@ -110,10 +110,10 @@ async function processPaidWithdrawal(withdrawalId: string) {
       updatedAt: new Date(),
     });
 
-    console.log(`[Bittnexis Sender] ✓ Successfully sent ${amount} tokens to ${withdrawal.walletAddress}, tx: ${txHash}`);
+    console.log(`[HA-RATE Sender] ✓ Successfully sent ${amount} tokens to ${withdrawal.walletAddress}, tx: ${txHash}`);
 
   } catch (error: any) {
-    console.error(`[Bittnexis Sender] Failed to process withdrawal ${withdrawalId}:`, error);
+    console.error(`[HA-RATE Sender] Failed to process withdrawal ${withdrawalId}:`, error);
 
     // Update status to failed
     await WithdrawalModel.findByIdAndUpdate(withdrawalId, {
@@ -129,13 +129,13 @@ async function processPaidWithdrawal(withdrawalId: string) {
 /**
  * Worker that checks for paid withdrawals and sends tokens
  */
-export async function startBittnexisSenderWorker() {
+export async function startHA-RATESenderWorker() {
   if (!config.projectWalletKey) {
-    console.warn('[Bittnexis Sender] PROJECT_WALLET_KEY not set. Token sending is disabled.');
+    console.warn('[HA-RATE Sender] PROJECT_WALLET_KEY not set. Token sending is disabled.');
     return;
   }
 
-  console.log('[Bittnexis Sender] Worker started - checking for paid withdrawals every 30 seconds');
+  console.log('[HA-RATE Sender] Worker started - checking for paid withdrawals every 30 seconds');
 
   // Check immediately on startup
   await checkAndProcessPaidWithdrawals();
@@ -158,11 +158,11 @@ async function checkAndProcessPaidWithdrawals() {
     }).sort({ createdAt: 1 }).limit(10); // Process oldest first, max 10 at a time
 
     if (paidWithdrawals.length === 0) {
-      console.log('[Bittnexis Sender] No paid withdrawals to process');
+      console.log('[HA-RATE Sender] No paid withdrawals to process');
       return;
     }
 
-    console.log(`[Bittnexis Sender] Found ${paidWithdrawals.length} paid withdrawal(s) to process`);
+    console.log(`[HA-RATE Sender] Found ${paidWithdrawals.length} paid withdrawal(s) to process`);
 
     // Process each withdrawal
     for (const withdrawal of paidWithdrawals) {
@@ -170,7 +170,7 @@ async function checkAndProcessPaidWithdrawals() {
     }
 
   } catch (error: any) {
-    console.error('[Bittnexis Sender] Error checking paid withdrawals:', error);
+    console.error('[HA-RATE Sender] Error checking paid withdrawals:', error);
   }
 }
 
