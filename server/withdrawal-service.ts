@@ -1,6 +1,6 @@
-import { WithdrawalModel } from './mongodb';
-import { storage } from './storage-mongodb';
-import { config } from './config';
+import { WithdrawalModel } from './mongodb.js';
+import { storage } from './storage-mongodb.js';
+import { config } from './config.js';
 
 // Fee configuration
 const WITHDRAWAL_FEE_TON = 0.5;

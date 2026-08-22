@@ -6,7 +6,7 @@ import {
   updateAdminSessionActivity,
   createAdminSession,
   destroyAdminSession,
-} from './admin-auth-service';
+} from './admin-auth-service.js';
 
 /**
  * Middleware to require admin authentication

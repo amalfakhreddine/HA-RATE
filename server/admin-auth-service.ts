@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { config } from './config';
+import { config } from './config.js';
 
 // Session timeout duration (15 minutes)
 export const ADMIN_SESSION_TIMEOUT_MS = 15 * 60 * 1000;

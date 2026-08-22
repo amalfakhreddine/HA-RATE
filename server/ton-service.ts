@@ -1,6 +1,6 @@
 import TonWeb from 'tonweb';
 import { Address, Cell } from '@ton/core';
-import { PaymentModel } from './mongodb';
+import { PaymentModel } from './mongodb.js';
 
 const TONCENTER_API_KEY = process.env.TONCENTER_API_KEY || '';
 const TONCENTER_ENDPOINT = 'https://toncenter.com/api/v2/jsonRPC';

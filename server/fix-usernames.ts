@@ -1,5 +1,5 @@
-import { db } from './db';
-import { users } from '../shared/schema';
+import { db } from './db.js';
+import { users } from '../shared/schema.js';
 import { sql } from 'drizzle-orm';
 
 async function fixUsernames() {

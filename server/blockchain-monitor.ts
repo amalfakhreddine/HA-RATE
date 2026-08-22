@@ -1,5 +1,5 @@
-import { WithdrawalModel } from './mongodb';
-import { config } from './config';
+import { WithdrawalModel } from './mongodb.js';
+import { config } from './config.js';
 import TonWeb from 'tonweb';
 
 /**

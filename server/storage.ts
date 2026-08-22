@@ -1,6 +1,6 @@
-import { type User, type InsertUser, type Task, type InsertTask, users, tasks } from "@shared/schema";
+import { type User, type InsertUser, type Task, type InsertTask, users, tasks } from "../shared/schema.js";
 import { randomUUID } from "crypto";
-import { db } from "./db";
+import { db } from "./db.js";
 import { eq, desc, sql } from "drizzle-orm";
 
 function generateReferralCode(): string {

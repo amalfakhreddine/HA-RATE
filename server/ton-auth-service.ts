@@ -1,7 +1,7 @@
 import { Address, Cell, loadStateInit, contractAddress } from '@ton/core';
 import { createHash } from 'crypto';
 import nacl from 'tweetnacl';
-import { NonceModel } from './mongodb';
+import { NonceModel } from './mongodb.js';
 
 interface TonProofPayload {
   address: string;

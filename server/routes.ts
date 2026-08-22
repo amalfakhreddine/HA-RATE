@@ -16,7 +16,7 @@ declare module 'express-serve-static-core' {
 export async function registerRoutes(app: Express): Promise<Server> {
   
   // Setup session middleware with MongoDB persistence
-  const { config } = await import('./config');
+  const { config } = await import('./config.js');
   
   // Determine if we're running on HTTPS (Replit always uses HTTPS)
   const isSecure = process.env.NODE_ENV === 'production' || !!process.env.REPL_ID;
@@ -73,7 +73,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Wallet address required" });
       }
       
-      const { generateNonce } = await import('./ton-auth-service');
+      const { generateNonce } = await import('./ton-auth-service.js');
       const nonce = await generateNonce(walletAddress);
       
       res.json({ nonce });
@@ -102,7 +102,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const payload = schema.parse(req.body);
       
-      const { verifyTonProof } = await import('./ton-auth-service');
+      const { verifyTonProof } = await import('./ton-auth-service.js');
       const isValid = await verifyTonProof(payload);
       
       if (!isValid) {
@@ -110,7 +110,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Normalize address to UQ... format (same as Tonkeeper)
-      const { normalizeAddress } = await import('./address-utils');
+      const { normalizeAddress } = await import('./address-utils.js');
       const walletAddress = normalizeAddress(payload.address);
       
       console.log('[Auth] Normalizing address:', {
@@ -143,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!user) {
         // Check if new user registrations are paused
-        const { getAppConfig } = await import('./admin-service');
+        const { getAppConfig } = await import('./admin-service.js');
         const config = await getAppConfig();
         
         if (config.registrationsPaused) {
@@ -203,7 +203,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Normalize address to UQ... format (same as Tonkeeper)
-      const { normalizeAddress } = await import('./address-utils');
+      const { normalizeAddress } = await import('./address-utils.js');
       const normalizedAddress = normalizeAddress(address);
       
       console.log('[Simple Auth] Normalizing address:', {
@@ -231,7 +231,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!user) {
         // Check if new user registrations are paused
-        const { getAppConfig } = await import('./admin-service');
+        const { getAppConfig } = await import('./admin-service.js');
         const config = await getAppConfig();
         
         if (config.registrationsPaused) {
@@ -288,7 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Normalize address to handle old sessions with different formats
-      const { normalizeAddress } = await import('./address-utils');
+      const { normalizeAddress } = await import('./address-utils.js');
       const normalizedAddress = normalizeAddress(walletAddress);
       
       console.log('[API /user] Found wallet in session:', walletAddress.slice(0, 10) + '...');
@@ -418,7 +418,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get subscription prices (public endpoint)
   app.get("/api/subscription-prices", async (req, res) => {
     try {
-      const { getAppConfig } = await import('./admin-service');
+      const { getAppConfig } = await import('./admin-service.js');
       const config = await getAppConfig();
       res.json({ 
         prices: config.subscriptionPrices || {
@@ -452,7 +452,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ error: "Merchant wallet not configured" });
       }
 
-      const { createPendingPayment } = await import('./payment-service');
+      const { createPendingPayment } = await import('./payment-service.js');
       const payment = await createPendingPayment({
         walletAddress,
         packageType,
@@ -493,7 +493,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ error: "Merchant wallet not configured" });
       }
 
-      const { verifyPayment } = await import('./payment-service');
+      const { verifyPayment } = await import('./payment-service.js');
       const result = await verifyPayment(paymentId, merchantWallet);
 
       if (result.success) {
@@ -702,8 +702,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get withdrawal status (enabled/disabled by team)
   app.get("/api/withdrawals/status", async (req, res) => {
     try {
-      const { config } = await import('./config');
-      const { getAppConfig } = await import('./admin-service');
+      const { config } = await import('./config.js');
+      const { getAppConfig } = await import('./admin-service.js');
       const appConfig = await getAppConfig();
       
       res.json({ 
@@ -725,7 +725,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Check if withdrawals are enabled in database settings
-      const { getAppConfig } = await import('./admin-service');
+      const { getAppConfig } = await import('./admin-service.js');
       const appConfig = await getAppConfig();
       
       if (!appConfig.withdrawalActive) {
@@ -738,7 +738,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { amount } = schema.parse(req.body);
 
-      const { createWithdrawalRequest } = await import('./withdrawal-service');
+      const { createWithdrawalRequest } = await import('./withdrawal-service.js');
       const result = await createWithdrawalRequest({
         walletAddress,
         amount,
@@ -762,7 +762,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "No wallet connected" });
       }
 
-      const { WithdrawalModel } = await import('./mongodb');
+      const { WithdrawalModel } = await import('./mongodb.js');
       const withdrawals = await WithdrawalModel.find({ 
         walletAddress 
       }).sort({ createdAt: -1 }).limit(50);
@@ -779,7 +779,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       
-      const { processWithdrawal } = await import('./withdrawal-service');
+      const { processWithdrawal } = await import('./withdrawal-service.js');
       const result = await processWithdrawal(id);
 
       res.json(result);
@@ -794,7 +794,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ============================================
   
   // Register admin authentication routes (login, logout, status)
-  const { registerAdminAuthRoutes, requireAdminAuth } = await import('./admin-auth-routes');
+  const { registerAdminAuthRoutes, requireAdminAuth } = await import('./admin-auth-routes.js');
   registerAdminAuthRoutes(app);
   
   // ============================================
@@ -807,7 +807,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get app configuration
   app.get("/api/admin/config", requireAdmin, async (req, res) => {
     try {
-      const { getAppConfig } = await import('./admin-service');
+      const { getAppConfig } = await import('./admin-service.js');
       const config = await getAppConfig();
       
       console.log('[Admin Config] Current config fetched:', {
@@ -834,7 +834,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { miningIntervalHours, miningBaseReward } = schema.parse(req.body);
       
-      const { updateMiningConfig } = await import('./admin-service');
+      const { updateMiningConfig } = await import('./admin-service.js');
       const result = await updateMiningConfig(miningIntervalHours, miningBaseReward);
 
       res.json({ success: true, ...result });
@@ -856,7 +856,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { prices } = schema.parse(req.body);
       
-      const { updateSubscriptionPrices } = await import('./admin-service');
+      const { updateSubscriptionPrices } = await import('./admin-service.js');
       const result = await updateSubscriptionPrices(prices);
 
       res.json({ success: true, prices: result });
@@ -878,7 +878,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { active } = schema.parse(req.body);
       
-      const { toggleWithdrawalActive } = await import('./admin-service');
+      const { toggleWithdrawalActive } = await import('./admin-service.js');
       const result = await toggleWithdrawalActive(active);
 
       res.json({ success: true, ...result });
@@ -902,7 +902,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('[Admin Config] Updating registrationsPaused to:', paused);
       
-      const { toggleRegistrationsPaused } = await import('./admin-service');
+      const { toggleRegistrationsPaused } = await import('./admin-service.js');
       const result = await toggleRegistrationsPaused(paused);
 
       console.log('[Admin Config] Updated successfully:', result);
@@ -920,7 +920,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all task definitions
   app.get("/api/admin/tasks", requireAdmin, async (req, res) => {
     try {
-      const { getAllTaskDefinitions } = await import('./admin-service');
+      const { getAllTaskDefinitions } = await import('./admin-service.js');
       const tasks = await getAllTaskDefinitions();
       
       res.json({ tasks });
@@ -949,7 +949,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const taskData = schema.parse(req.body);
       
-      const { createTaskDefinition } = await import('./admin-service');
+      const { createTaskDefinition } = await import('./admin-service.js');
       const task = await createTaskDefinition(taskData);
 
       res.json({ success: true, task });
@@ -984,7 +984,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const updates = schema.parse(req.body);
       
-      const { updateTaskDefinition } = await import('./admin-service');
+      const { updateTaskDefinition } = await import('./admin-service.js');
       const task = await updateTaskDefinition(taskId, updates);
 
       res.json({ success: true, task });
@@ -1002,7 +1002,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { taskId } = req.params;
       
-      const { deleteTaskDefinition } = await import('./admin-service');
+      const { deleteTaskDefinition } = await import('./admin-service.js');
       const result = await deleteTaskDefinition(taskId);
 
       res.json(result);
@@ -1017,7 +1017,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { taskId } = req.params;
       
-      const { getUserTasksForDefinition } = await import('./admin-service');
+      const { getUserTasksForDefinition } = await import('./admin-service.js');
       const userTasks = await getUserTasksForDefinition(taskId);
 
       res.json({ userTasks });
@@ -1038,7 +1038,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { walletAddress, taskId, completed } = schema.parse(req.body);
       
-      const { verifyUserTask } = await import('./admin-service');
+      const { verifyUserTask } = await import('./admin-service.js');
       const result = await verifyUserTask(walletAddress, taskId, completed);
 
       res.json({ success: true, task: result });
@@ -1061,7 +1061,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { tgeDate } = schema.parse(req.body);
       const date = tgeDate ? new Date(tgeDate) : new Date();
       
-      const { enableTGE } = await import('./admin-service');
+      const { enableTGE } = await import('./admin-service.js');
       const result = await enableTGE(date);
 
       res.json(result);
@@ -1077,7 +1077,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Disable TGE
   app.post("/api/admin/tge/disable", requireAdmin, async (req, res) => {
     try {
-      const { disableTGE } = await import('./admin-service');
+      const { disableTGE } = await import('./admin-service.js');
       const result = await disableTGE();
 
       res.json(result);
@@ -1090,7 +1090,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all withdrawals for admin monitoring
   app.get("/api/admin/withdrawals", requireAdmin, async (req, res) => {
     try {
-      const { WithdrawalModel } = await import('./mongodb');
+      const { WithdrawalModel } = await import('./mongodb.js');
       const withdrawals = await WithdrawalModel.find({})
         .sort({ createdAt: -1 })
         .limit(100);
@@ -1115,7 +1115,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get admin statistics
   app.get("/api/admin/stats", requireAdmin, async (req, res) => {
     try {
-      const { getAdminStats } = await import('./admin-service');
+      const { getAdminStats } = await import('./admin-service.js');
       const stats = await getAdminStats();
       
       res.json(stats);
@@ -1128,7 +1128,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Fix usernames to match wallet addresses (one-time admin action)
   app.post("/api/admin/fix-usernames", requireAdmin, async (req, res) => {
     try {
-      const { UserModel } = await import('./mongodb');
+      const { UserModel } = await import('./mongodb.js');
       const allUsers = await UserModel.find({});
       const updates: string[] = [];
       

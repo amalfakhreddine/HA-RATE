@@ -1,5 +1,5 @@
-import { AppConfigModel, TaskDefinitionModel, UserModel, TaskModel } from './mongodb';
-import { config } from './config';
+import { AppConfigModel, TaskDefinitionModel, UserModel, TaskModel } from './mongodb.js';
+import { config } from './config.js';
 
 // Check if a wallet address is an admin
 export function isAdmin(walletAddress: string | null): boolean {

@@ -1,5 +1,5 @@
-import { storage } from './storage-mongodb';
-import { config } from './config';
+import { storage } from './storage-mongodb.js';
+import { config } from './config.js';
 
 // Auto-mining worker - processes mining rewards for users with auto-mining active
 export class AutoMiningWorker {

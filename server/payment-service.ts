@@ -1,6 +1,6 @@
-import { PaymentModel } from './mongodb';
-import { verifyTransaction } from './ton-service';
-import { storage } from './storage-mongodb';
+import { PaymentModel } from './mongodb.js';
+import { verifyTransaction } from './ton-service.js';
+import { storage } from './storage-mongodb.js';
 
 interface CreatePaymentParams { walletAddress: string; packageType: string; merchantWallet: string; }
 
