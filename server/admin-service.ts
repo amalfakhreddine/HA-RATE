@@ -311,7 +311,7 @@ export async function getAdminStats() {
   
   return {
     totalUsers,
-    totalBittnexisDistributed: totalBalance[0]?.totalBittnexis || 0,
+    totalHARATEDistributed: totalBalance[0]?.totalBittnexis || 0,
     activeSubscriptions,
     totalTaskDefinitions: totalTasks,
     completedUserTasks: completedTasks,
