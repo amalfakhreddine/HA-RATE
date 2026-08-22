@@ -1,12 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  >
+
   <title>HA-RATE</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0d0d0d;
+      color: white;
+      font-family: Arial, sans-serif;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 38px;
+    }
+
+    #status {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #191919;
+      border-radius: 20px;
+      padding: 22px;
+      text-align: left;
+    }
+
+    .label {
+      color: #888;
+      font-size: 13px;
+      margin-top: 15px;
+    }
+
+    .value {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>HA-RATE</h1>
-  <p>Telegram mini app coming soon.</p>
+
+  <div class="container">
+
+    <h1>HA-RATE</h1>
+
+    <div id="status">
+      Connecting to Telegram...
+    </div>
+
+    <div class="card" id="userCard" style="display:none;">
+
+      <div class="label">PLAYER</div>
+      <div class="value" id="playerName">-</div>
+
+      <div class="label">COINS</div>
+      <div class="value" id="coins">0</div>
+
+      <div class="label">LEVEL</div>
+      <div class="value" id="level">0</div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+    async function startHARATE() {
+
+      const status = document.getElementById("status");
+
+      try {
+
+        if (!tg.initData) {
+          status.innerText =
+            "Please open HA-RATE from Telegram.";
+          return;
+        }
+
+        status.innerText = "Loading your account...";
+
+        const response = await fetch("/api/user", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            initData: tg.initData
+          })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+          console.error(data);
+
+          status.innerText =
+            data.error || "Could not load account.";
+
+          return;
+
+        }
+
+
+        document.getElementById("playerName").innerText =
+          data.first_name ||
+          data.username ||
+          "Player";
+
+
+        document.getElementById("coins").innerText =
+          Number(data.coins || 0).toLocaleString();
+
+
+        document.getElementById("level").innerText =
+          data.level || 0;
+
+
+        document.getElementById("userCard").style.display =
+          "block";
+
+
+        status.innerText = "Connected ✓";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        status.innerText =
+          "Connection error.";
+
+      }
+
+    }
+
+
+    startHARATE();
+
+  </script>
+
 </body>
 </html>
